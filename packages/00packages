@@ -1,0 +1,50 @@
+[CPU-Load]
+name = CPU-Load
+category = System
+author = Leon Schnieber (olagino)
+icon = icon.png
+desc = A small App for the TXT to check the average processor load and the available RAM.
+exec = main.py
+managed = yes
+uuid = 443dd03b-d671-4103-b035-924c175e4e1c
+version = 1
+firmware = >=0.9.0
+
+[IOlyser]
+name = IOlyser
+category = System
+author = Leon Schnieber (olagino)
+icon = icon.png
+desc = This tool is used for testing the IOs of the TXT without a computer nearby.
+exec = script.py
+managed = yes
+uuid = 3434343-5199-11e6-beb8-9e71128cae7
+version = 0.9.6
+firmware = >=0.9.3
+
+[Radio]
+name = Radio
+category = Tests
+author = Raphael Jacob
+icon = icon.png
+desc = Webradio-Player
+exec = radio.py
+html = web.py
+managed = yes
+uuid = ad5e0ea4-4606-4254-add6-60c452c3db36
+version = 1.0
+firmware = >=0.9.0
+
+[Telegram]
+name = Telegram
+category = Remote Control
+author = Raphael Jacob &lt;r.jacob2002@gmail.com&gt;
+icon = icon.png
+desc = Simple App to control the TXT via the instant Messenger Telegram
+exec = telegram-app.py
+html = config.py
+managed = yes
+uuid = 6026c098-cb9b-45da-9c8c-9d05eb44a4fd
+version = 1.0.6
+firmware = >=0.9.3
+
