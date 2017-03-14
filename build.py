@@ -43,16 +43,16 @@ for l in sorted(os.listdir(".")):
             general_copy = ["name", "category", "author", "icon", "desc", "exec", "html", "managed", "uuid", "version", "firmware"]
             lang_copy = ["name", "desc", "html"]
             name = package.get("app", "name")
-            packages.add_section(name)
+            packages.add_section(l)
             for entry in general_copy:
                 if package.has_option("app", entry):
-                    packages.set(name, entry, package.get("app", entry))
+                    packages.set(l, entry, package.get("app", entry))
             for lang in package.sections():
                 if lang == "app":
                     continue
                 for entry in lang_copy:
                     if package.has_option(lang, entry):
-                        packages.set(name, entry + "_" + lang, package.get(lang, entry))
+                        packages.set(l, entry + "_" + lang, package.get(lang, entry))
             os.system("cd " + l + "; zip -r ../" + l + ".zip *")
 
 pkgfile = open("00packages", "w")
