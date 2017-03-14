@@ -5,3 +5,9 @@ script: python3 build.py
 cache:
   files:
     - 00packages
+notifications:
+  irc:
+    channels:
+      - "irc.ftcommunity.de##CFW"
+    on_success: always
+    on_failure: always
