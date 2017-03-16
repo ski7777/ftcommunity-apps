@@ -1,0 +1,13 @@
+[app]
+name: Nunchuk
+category: Tools
+author: Raphael Jacob
+icon: icon.png
+desc: Test your Wii Nunchuk Controller
+exec: nunchuk.py
+managed: yes
+uuid: b3cd5e60-3ad7-4b09-a11e-e478a6d8f70a
+version: 1.0
+firmware: >=0.9.0
+[de]
+desc: Teste deinen Nunchuk Controller
