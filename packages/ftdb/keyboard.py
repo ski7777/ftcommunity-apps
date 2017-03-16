@@ -2,7 +2,9 @@
 # -*- coding: utf-8 -*-
 #
 from TouchStyle import *
+import os
 
+icon_path = os.path.dirname(os.path.realpath(__file__)) + '/osk/'
 # simple on-screen-keyboard to be used on devices without physical
 # keyboard attached
 
@@ -97,7 +99,7 @@ class TouchKeyboard(TouchDialog):
         self.line.setAlignment(Qt.AlignCenter)
         edit.hbox.addWidget(self.line)
         but = QPushButton(" ")
-        but.setIcon(QIcon("osk/osk_erase"))
+        but.setIcon(QIcon(icon_path + "osk_erase"))
         but.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
         but.clicked.connect(self.key_erase)
         edit.hbox.addWidget(but)
@@ -123,7 +125,7 @@ class TouchKeyboard(TouchDialog):
             for cnt in range(len(keys[a])):
                 if keys[a][cnt] == "Aa":
                     but = QPushButton()
-                    but.setIcon(QIcon("osk/osk_caps"))
+                    but.setIcon(QIcon(icon_path + "osk_caps"))
                     but.clicked.connect(self.caps_changed)
                 else:
                     but = self.KbdButton(keys[a][cnt], subs[a][cnt])
