@@ -22,7 +22,8 @@ commit_range = os.environ["TRAVIS_COMMIT_RANGE"].split("...")
 git_log = os.popen("git diff-tree --no-commit-id --name-only -r " + commit_range[0] + " " + commit_range[1]).read().split("\n")
 print(git_log)
 for change in git_log:
-    print(change, os.path.join("/".join(change.split("/").pop()))
+    print(change)
+    print(os.path.join("/".join(change.split("/").pop()))
     if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build=True
 
