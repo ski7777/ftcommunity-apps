@@ -25,6 +25,8 @@ for change in git_log:
     if change == "": continue
     print(change)
     if not "/" in change: continue
+    print(change.split("/").pop())
+    print("/".join(change.split("/").pop()))
     print(os.path.join("/".join(change.split("/").pop())))
     if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build=True
