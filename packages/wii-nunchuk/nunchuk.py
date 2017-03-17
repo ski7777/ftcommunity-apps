@@ -5,7 +5,7 @@
 import sys
 from TouchStyle import *
 import smbus
-bus = smbus.SMBus(1)
+import time
 
 
 class Axes2dWidget(QWidget):
@@ -20,6 +20,7 @@ class Axes2dWidget(QWidget):
         self.x = 0.0
         self.y = 0.0
         self.color = QColor("#fcce04")
+        self.error = False
 
     def heightForWidth(self, w):
         return w
@@ -30,7 +31,10 @@ class Axes2dWidget(QWidget):
 
         painter.setRenderHint(QPainter.Antialiasing)
 
-        pen = QPen(QColor("lightgrey"))
+        if self.error:
+            pen = QPen(QColor("#ff0000"))
+        else:
+            pen = QPen(QColor("lightgrey"))
         pen.setWidth(self.width() / 20)
         painter.setPen(pen)
         painter.drawRect(self.rect())
@@ -50,7 +54,8 @@ class Axes2dWidget(QWidget):
         pen.setStyle(Qt.SolidLine)
         painter.setPen(pen)
         painter.setBrush(QBrush(self.color))
-        painter.drawEllipse(x - r / 2, y - r / 2, r, r)
+        if not self.error:
+            painter.drawEllipse(x - r / 2, y - r / 2, r, r)
 
         painter.end()
 
@@ -61,6 +66,7 @@ class Axes2dWidget(QWidget):
             self.y = y
         if c != None:
             self.color = c
+        self.error = False
         self.update()
 
 
@@ -75,6 +81,7 @@ class ButtonWidget(QWidget):
 
         self.state = False
         self.text = text
+        self.error = False
 
     def heightForWidth(self, w):
         return w
@@ -98,38 +105,44 @@ class ButtonWidget(QWidget):
         pen = QPen(QColor("lightgrey"))
         pen.setWidth(self.width() / 50)
         painter.setPen(pen)
-        if self.state:
+        if self.error:
+            painter.setBrush(QBrush(QColor("#ff0000")))
+        elif self.state:
             painter.setBrush(QBrush(QColor("#fcce04")))
         else:
             painter.setBrush(Qt.transparent)
         painter.drawEllipse(QRect(x, y, r, r))
-        painter.drawText(QRect(x, y, r, r), Qt.AlignCenter, self.text)
+        if not self.error:
+            painter.drawText(QRect(x, y, r, r), Qt.AlignCenter, self.text)
 
         painter.end()
 
     def set(self, b):
         self.state = b
+        self.error = False
         self.update()
 
 
 class NunchukThread(QThread):
 
     new_data = pyqtSignal(list)
+    error = pyqtSignal()
 
     def __init__(self, parent):
         super(NunchukThread, self).__init__(parent)
 
     def run(self):
-        bus.write_byte_data(0x52, 0x40, 0x00)
+        self.bus = smbus.SMBus(1)
+        self.bus.write_byte_data(0x52, 0x40, 0x00)
         while True:
             try:
-                bus.write_byte(0x52, 0x00)
-                data0 = bus.read_byte(0x52)
-                data1 = bus.read_byte(0x52)
-                data2 = bus.read_byte(0x52)
-                data3 = bus.read_byte(0x52)
-                data4 = bus.read_byte(0x52)
-                data5 = bus.read_byte(0x52)
+                self.bus.write_byte(0x52, 0x00)
+                data0 = self.bus.read_byte(0x52)
+                data1 = self.bus.read_byte(0x52)
+                data2 = self.bus.read_byte(0x52)
+                data3 = self.bus.read_byte(0x52)
+                data4 = self.bus.read_byte(0x52)
+                data5 = self.bus.read_byte(0x52)
                 joy_x = data0
                 joy_y = data1
                 accel_x = (data2 << 2) + ((data5 & 0x0c) >> 2)
@@ -151,6 +164,16 @@ class NunchukThread(QThread):
                 self.new_data.emit([joy, acc, but])
             except IOError as e:
                 print(e)
+                solved = False
+                while not solved:
+                    self.error.emit()
+                    try:
+                        self.bus = smbus.SMBus(1)
+                        self.bus.write_byte_data(0x52, 0x40, 0x00)
+                        solved = True
+                    except IOError as f:
+                        print(f)
+                    time.sleep(0.1)
 
 
 class TouchGuiApplication(TouchApplication):
@@ -159,11 +182,13 @@ class TouchGuiApplication(TouchApplication):
         TouchApplication.__init__(self, args)
 
         # create the empty main window
-        w = TouchWindow("Nunchuk")
+        self.name = "Nunchuk"
+        self.w = TouchWindow(self.name)
         self.vbox = QVBoxLayout()
 
         self.thread = NunchukThread(self)
         self.thread.new_data.connect(self.on_data)
+        self.thread.error.connect(self.on_error)
         self.thread.start()
 
         self.xyz_hbox = QHBoxLayout()
@@ -182,11 +207,13 @@ class TouchGuiApplication(TouchApplication):
 
         self.vbox.addLayout(self.xyz_hbox)
         self.vbox.addLayout(self.but_hbox)
-        w.centralWidget.setLayout(self.vbox)
-        w.show()
+        self.w.centralWidget.setLayout(self.vbox)
+        self.w.show()
         self.exec_()
 
     def on_data(self, data):
+        self.w.titlebar.setText(self.name)
+        self.w.titlebar.setStyleSheet('')
         self.joy_widget.set((data[0]['x'] - 128) / 128, (data[0]['y'] - 128) / -128, None)
         if (data[1]['z'] - 250) * 0.51 < 0:
             c = 0
@@ -197,6 +224,18 @@ class TouchGuiApplication(TouchApplication):
         self.accxy_widget.set((data[1]['x'] - 500) / 500, (data[1]['y'] - 500) / -500, QColor(c, c, c))
         self.c.set(data[2]['c'])
         self.z.set(data[2]['z'])
+
+    def on_error(self):
+        self.c.error = True
+        self.c.update()
+        self.z.error = True
+        self.z.update()
+        self.joy_widget.error = True
+        self.joy_widget.update()
+        self.accxy_widget.error = True
+        self.accxy_widget.update()
+        self.w.titlebar.setText("Error")
+        self.w.titlebar.setStyleSheet('color: red')
 
 if __name__ == "__main__":
     TouchGuiApplication(sys.argv)
