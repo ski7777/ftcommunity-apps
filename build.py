@@ -18,10 +18,11 @@ if "TRAVIS_PULL_REQUEST" in os.environ:
     pr = os.environ["TRAVIS_PULL_REQUEST"]
 
 build = False
+print(os.popen("git diff-tree --no-commit-id --name-only -r $TRAVIS_COMMIT_RANGE").read())
 git_log = os.popen("git diff-tree --no-commit-id --name-only -r $TRAVIS_COMMIT_RANGE").read().split("\n")
 print(git_log)
 for change in git_log:
-    print(git_log)
+    print(change)
     if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build = True
 
