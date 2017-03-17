@@ -16,13 +16,14 @@ if "TRAVIS_COMMIT_MESSAGE" in os.environ:
 pr = ""
 if "TRAVIS_PULL_REQUEST" in os.environ:
     pr = os.environ["TRAVIS_PULL_REQUEST"]
-    
+
 build = False
 git_log = os.popen('cat /etc/services').read().split("\n")
 for change in git_log:
     if ".zip" in change:
         continue
-    if os.path.isdir(os.path.join(*change.split("/").pop())):
+    path = change.split("/").pop()
+    if os.path.isdir(os.path.join(*path)):
         build = True
 
 if not build or "true" in pr:
