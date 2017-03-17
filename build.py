@@ -22,8 +22,7 @@ git_log = os.popen('cat /etc/services').read().split("\n")
 for change in git_log:
     if ".zip" in change:
         continue
-    path = change.split("/").pop()
-    if os.path.isdir(os.path.join(*path)):
+    if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build = True
 
 if not build or "true" in pr:
