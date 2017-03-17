@@ -50,13 +50,17 @@ class Axes2dWidget(QWidget):
         y = (self.y + 1) / 2 * self.height()
         r = self.width() / 10
 
-        pen.setWidth(self.width() / 100)
-        pen.setStyle(Qt.SolidLine)
-        painter.setPen(pen)
-        painter.setBrush(QBrush(self.color))
-        if not self.error:
+        if self.error:
+            pen = QPen(QColor("#fcce04"))
+            pen.setWidth(self.width() / 50)
+            painter.setPen(pen)
+            painter.drawText(QRect(0, 0, self.width(), self.height() * 0.7), Qt.AlignCenter, "Error")
+        else:
+            pen.setWidth(self.width() / 100)
+            pen.setStyle(Qt.SolidLine)
+            painter.setPen(pen)
+            painter.setBrush(QBrush(self.color))
             painter.drawEllipse(x - r / 2, y - r / 2, r, r)
-
         painter.end()
 
     def set(self, x, y, c):
@@ -112,7 +116,16 @@ class ButtonWidget(QWidget):
         else:
             painter.setBrush(Qt.transparent)
         painter.drawEllipse(QRect(x, y, r, r))
-        if not self.error:
+
+        if self.error:
+            pen = QPen(QColor("#fcce04"))
+            pen.setWidth(self.width() / 50)
+            painter.setPen(pen)
+            painter.drawText(QRect(x, y, r, r), Qt.AlignCenter, "Error")
+        else:
+            pen = QPen(QColor("white"))
+            pen.setWidth(self.width() / 50)
+            painter.setPen(pen)
             painter.drawText(QRect(x, y, r, r), Qt.AlignCenter, self.text)
 
         painter.end()
@@ -132,8 +145,21 @@ class NunchukThread(QThread):
         super(NunchukThread, self).__init__(parent)
 
     def run(self):
-        self.bus = smbus.SMBus(1)
-        self.bus.write_byte_data(0x52, 0x40, 0x00)
+        try:
+            self.bus = smbus.SMBus(1)
+            self.bus.write_byte_data(0x52, 0x40, 0x00)
+        except IOError as e:
+            print(e)
+            solved = False
+            while not solved:
+                self.error.emit()
+                try:
+                    self.bus = smbus.SMBus(1)
+                    self.bus.write_byte_data(0x52, 0x40, 0x00)
+                    solved = True
+                except IOError as f:
+                    print(f)
+                time.sleep(0.1)
         while True:
             try:
                 self.bus.write_byte(0x52, 0x00)
@@ -186,7 +212,7 @@ class TouchGuiApplication(TouchApplication):
         self.w = TouchWindow(self.name)
         self.vbox = QVBoxLayout()
 
-        self.thread = NunchukThread(self)
+        self.thread = NunchukThread(self.w)
         self.thread.new_data.connect(self.on_data)
         self.thread.error.connect(self.on_error)
         self.thread.start()
