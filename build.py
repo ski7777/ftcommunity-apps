@@ -25,7 +25,7 @@ for change in git_log:
     print("NEW!!!")
     if change == "": continue
     print(change)
-    if change "build.py":
+    if change == "build.py":
         build = True
     if not "/" in change: continue
     print(change.split("/"))
