@@ -20,14 +20,12 @@ if "TRAVIS_PULL_REQUEST" in os.environ:
 build = False
 git_log = os.popen('cat /etc/services').read().split("\n")
 for change in git_log:
-    if ".zip" in change:
-        continue
     if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build = True
 
 if not build or "true" in pr:
-    print("Self triggered Build")
-    print("Auto-Abort!")
+    print("Nothing Changed")
+    print("Aborting!")
     sys.exit(0)
 
 os.system("git checkout $TRAVIS_BRANCH")
