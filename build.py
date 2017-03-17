@@ -23,7 +23,7 @@ git_log = os.popen("git diff-tree --no-commit-id --name-only -r " + commit_range
 print(git_log)
 for change in git_log:
     print(change)
-    print(os.path.join("/".join(change.split("/").pop()))
+    print(os.path.join("/".join(change.split("/").pop())))
     if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
         build=True
 
