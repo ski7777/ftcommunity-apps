@@ -22,6 +22,7 @@ commit_range = os.environ["TRAVIS_COMMIT_RANGE"].split("...")
 git_log = os.popen("git diff-tree --no-commit-id --name-only -r " + commit_range[0] + " " + commit_range[1]).read().split("\n")
 print(git_log)
 for change in git_log:
+    print("NEW!!!")
     if change == "": continue
     print(change)
     if not "/" in change: continue
