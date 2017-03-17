@@ -16,8 +16,16 @@ if "TRAVIS_COMMIT_MESSAGE" in os.environ:
 pr = ""
 if "TRAVIS_PULL_REQUEST" in os.environ:
     pr = os.environ["TRAVIS_PULL_REQUEST"]
+    
+build = False
+git_log = os.popen('cat /etc/services').read().split("\n")
+for change in git_log:
+    if ".zip" in change:
+        continue
+    if os.path.isdir(os.path.join(*change.split("/").pop())):
+        build = True
 
-if "by travis" in commit_msg or "true" in pr:
+if not build or "true" in pr:
     print("Self triggered Build")
     print("Auto-Abort!")
     sys.exit(0)
@@ -60,5 +68,5 @@ packages.write(pkgfile)
 pkgfile.close()
 os.system("git config --global push.default simple")
 os.system("git add -A")
-os.system('git -c user.name="$GITHUB_USER" -c user.email="$GITHUB_MAIL" commit -a -m "Automaticly update Repository --- by travis"')
+os.system('git -c user.name="$GITHUB_USER" -c user.email="$GITHUB_MAIL" commit -a -m "Travis: Rebuilt package archives from $TRAVIS_COMMIT_RANGE"')
 os.system('git push -f -q https://$GITHUB_USER:$GITHUB_API_KEY@github.com/$TRAVIS_REPO_SLUG/')
