@@ -17,6 +17,8 @@ pr = ""
 if "TRAVIS_PULL_REQUEST" in os.environ:
     pr = os.environ["TRAVIS_PULL_REQUEST"]
 
+os.system("git checkout $TRAVIS_BRANCH")
+
 build = False
 commit_range = os.environ["TRAVIS_COMMIT_RANGE"].split("...")
 git_log = os.popen("git diff-tree --no-commit-id --name-only -r " + commit_range[0] + " " + commit_range[1]).read().split("\n")
@@ -27,7 +29,9 @@ for change in git_log:
         build = True
     if not "/" in change:
         continue
-    if os.path.isdir(os.path.join("/".join(change.split("/").pop()))):
+    if ".zip" in change.split("/")[1]:
+        continue
+    if os.path.isfile(change):
         build = True
 
 if not build or "true" in pr:
@@ -35,7 +39,6 @@ if not build or "true" in pr:
     print("Aborting!")
     sys.exit(0)
 
-os.system("git checkout $TRAVIS_BRANCH")
 os.system("rm packages/*.zip")
 print("Building package index ...")
 
