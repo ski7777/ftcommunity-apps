@@ -141,9 +141,9 @@ class TouchGuiApplication(TouchApplication):
 
         self.pressure_label.setText("Error")
         self.pressure_label.title.setStyleSheet('color: red')
-        self.temperature_label.setText("Eroor")
+        self.temperature_label.setText("Error")
         self.temperature_label.title.setStyleSheet('color: red')
-        self.altitude_label.setText("Eroor")
+        self.altitude_label.setText("Error")
         self.altitude_label.title.setStyleSheet('color: red')
 
     def on_QNH(self):
