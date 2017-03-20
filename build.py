@@ -32,6 +32,8 @@ for change in git_log:
         continue
     if ".zip" in change.split("/")[1]:
         continue
+    if "00packages" in change:
+        continue
     if os.path.isfile(change):
         print("Changed: " + change)
         build = True
