@@ -52,15 +52,15 @@ class EntryWidget(QWidget):
     def __init__(self, title, parent=None):
         QWidget.__init__(self, parent)
 
-        layout = QVBoxLayout()
-        layout.setSpacing(0)
+        self.layout = QVBoxLayout()
+        self.layout.setSpacing(0)
         self.title = QLabel(title)
-        layout.addWidget(self.title)
+        self.layout.addWidget(self.title)
         self.value = QLabel("")
         self.value.setObjectName("smalllabel")
         self.value.setWordWrap(True)
-        layout.addWidget(self.value)
-        self.setLayout(layout)
+        self.layout.addWidget(self.value)
+        self.setLayout(self.layout)
 
     def setText(self, str):
         self.value.setText(str)
@@ -114,9 +114,10 @@ class TouchGuiApplication(TouchApplication):
         self.altitude_label = EntryWidget("Altitude")
         self.vbox.addWidget(self.altitude_label)
 
-        self.qnh_label = EntryWidget("QNH")
+        self.qnh_label = EntryWidget("QNH Click to edit")
         self.qnh_label.setText(str("{0:.1f}".format(self.qnh)) + "hPA")
         self.qnh_label.pressed.connect(self.on_QNH)
+        self.qnh_label.pressed.connect(self.reset_QNH_Text)
         self.vbox.addWidget(self.qnh_label)
 
         self.w.centralWidget.setLayout(self.vbox)
@@ -151,6 +152,9 @@ class TouchGuiApplication(TouchApplication):
         dialog.exec_()
         self.qnh = dialog.spin.value()
         self.qnh_label.setText(str("{0:.1f}".format(self.qnh)) + "hPA")
+
+    def reset_QNH_Text(self):
+        self.qnh_label.title.setText("QNH")
 
 if __name__ == "__main__":
     TouchGuiApplication(sys.argv)
