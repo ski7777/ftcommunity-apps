@@ -26,12 +26,14 @@ for change in git_log:
     if change == "":
         continue
     if change == "build.py":
+        print("Changed: " + change)
         build = True
     if not "/" in change:
         continue
     if ".zip" in change.split("/")[1]:
         continue
     if os.path.isfile(change):
+        print("Changed: " + change)
         build = True
 
 if not build or "true" in pr:
