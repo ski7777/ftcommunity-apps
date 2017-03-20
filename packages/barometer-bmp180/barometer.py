@@ -81,8 +81,8 @@ class QNH_Dialog(TouchDialog):
         self.spin.setSingleStep(0.1)
         self.spin.setValue(qnh)
         self.spin.setStyleSheet("""QDoubleSpinBox { border: 3px inset grey; }
-                                QDoubleSpinBox::up-button { subcontrol-position: left; width: 40px; height: 35px;}
-                                QDoubleSpinBox::down-button { subcontrol-position: right; width: 40px; height: 35px;}""")
+                                QDoubleSpinBox::up-button { subcontrol-position: right; width: 40px; height: 35px;}
+                                QDoubleSpinBox::down-button { subcontrol-position: left; width: 40px; height: 35px;}""")
         self.vbox.addWidget(self.spin)
         self.vbox.addStretch()
         self.centralWidget.setLayout(self.vbox)
