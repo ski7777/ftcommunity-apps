@@ -1,0 +1,136 @@
+[BenoiTXT]
+name = BenoiTxt
+category = Tools
+author = Peter Habermehl
+icon = icon.png
+desc = Mandelbrot picture generator
+exec = benoitxt.py
+managed = yes
+uuid = cb8adf72-f23b-11e6-bc64-92361f002671
+version = 1.4242
+firmware = >=0.9.2
+desc_de = Mandelbrot-Bilder-Generator
+
+[BrickMCP]
+name = BrickMCP
+category = Tools
+author = Peter Habermehl
+icon = icon.png
+desc = Brickly Master Control Program to organize Brickly projects
+exec = brickmcp.py
+html = index.py?lang=en
+managed = yes
+uuid = 691061e0-eb93-11e6-9598-0800200c9a66
+version = 0.6
+firmware = >=0.9.2
+desc_de = Das Brickly Master Control Program zum Verwalten von Brickly-Projekten
+html_de = index.py?lang=de
+desc_fr = Brickly Master Control Program pour organiser vos projets Brickly
+html_fr = index.py?lang=fr
+
+[TXTShow]
+name = TXTShow
+category = Tools
+author = Peter Habermehl
+icon = icon.png
+desc = Take photos and manage albums on TXT
+exec = txtshow.py
+html = index.py?lang=en
+managed = yes
+uuid = 37681ea0-dc00-11e6-9598-0800200c9a66
+version = 1.4.1
+firmware = >=0.9.2
+desc_de = Fotografiere und verwalte Bilder mit dem TXT
+html_de = index.py?lang=de
+
+[barometer-bmp180]
+name = Barometer
+category = Tests
+author = Raphael Jacob
+icon = icon.png
+desc = Test your BMP180 barometer
+exec = barometer.py
+managed = yes
+uuid = 5f5350fa-e2bb-493c-9bac-5d97727bf470
+version = 1.0
+firmware = >=0.9.0
+desc_de = Teste dein BMP180 Baromoter
+
+[brickly]
+name = Brickly
+category = Tools
+author = Till Harbaum
+icon = icon.png
+desc = Blockly based visual programming environment
+exec = brickly_app.py
+html = index.html
+managed = yes
+uuid = 1f2d90a3-11e9-4a92-955a-73ffaec0fe71
+version = 1.29
+firmware = >=0.9.0
+name_de = Brickly
+desc_de = Blockly-Demo
+html_de = index.html?lang=de
+
+[cpu_load]
+name = CPU-Load
+category = System
+author = Leon Schnieber (olagino)
+icon = icon.png
+desc = A small App for the TXT to check the average processor load and the available RAM.
+exec = main.py
+managed = yes
+uuid = 443dd03b-d671-4103-b035-924c175e4e1c
+version = 1
+firmware = >=0.9.0
+
+[ftdb]
+name = ft:db
+category = Tools
+author = Raphael Jacob
+icon = icon.png
+desc = ft:db search app. Icon partly by http://www.webalys.com/
+exec = ftdb.py
+managed = yes
+uuid = dce63db7-1327-4cb3-a04e-c358ac04b794
+version = 1.0
+firmware = >=0.9
+
+[iolyser]
+name = IOlyser
+category = System
+author = Leon Schnieber (olagino)
+icon = icon.png
+desc = This tool is used for testing the IOs of the TXT without a computer nearby.
+exec = script.py
+managed = yes
+uuid = 3434343-5199-11e6-beb8-9e71128cae7
+version = 0.9.5
+firmware = >=0.9.0, <0.9.3
+
+[radio]
+name = Radio
+category = Tests
+author = Raphael Jacob
+icon = icon.png
+desc = Webradio-Player
+exec = radio.py
+html = web.py
+managed = yes
+uuid = ad5e0ea4-4606-4254-add6-60c452c3db36
+version = 1.0
+firmware = >=0.9.0
+
+[wii-nunchuk]
+name = Nunchuk
+category = Tests
+author = Raphael Jacob
+icon = icon.png
+desc = Test your Wii Nunchuk Controller
+exec = nunchuk.py
+managed = yes
+uuid = b3cd5e60-3ad7-4b09-a11e-e478a6d8f70a
+version = 1.0.3
+firmware = >=0.9.0
+desc_de = Teste deinen Nunchuk Controller
+
