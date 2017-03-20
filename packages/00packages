@@ -52,7 +52,7 @@ desc = Test your BMP180 barometer
 exec = barometer.py
 managed = yes
 uuid = 5f5350fa-e2bb-493c-9bac-5d97727bf470
-version = 1.1.0
+version = 1.1.1
 firmware = >=0.9.0
 desc_de = Teste dein BMP180 Baromoter
 
