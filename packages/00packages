@@ -1,4 +1,4 @@
-[CPU-Load]
+[cpu_load]
 name = CPU-Load
 category = System
 author = Leon Schnieber (olagino)
@@ -10,7 +10,7 @@ uuid = 443dd03b-d671-4103-b035-924c175e4e1c
 version = 1
 firmware = >=0.9.0
 
-[IOlyser]
+[iolyser]
 name = IOlyser
 category = System
 author = Leon Schnieber (olagino)
@@ -22,7 +22,7 @@ uuid = 3434343-5199-11e6-beb8-9e71128cae7
 version = 0.9.6
 firmware = >=0.9.3
 
-[Radio]
+[radio]
 name = Radio
 category = Tests
 author = Raphael Jacob
@@ -35,7 +35,7 @@ uuid = ad5e0ea4-4606-4254-add6-60c452c3db36
 version = 1.0
 firmware = >=0.9.0
 
-[Telegram]
+[telegram]
 name = Telegram
 category = Remote Control
 author = Raphael Jacob &lt;r.jacob2002@gmail.com&gt;
