@@ -17,12 +17,32 @@ pr = ""
 if "TRAVIS_PULL_REQUEST" in os.environ:
     pr = os.environ["TRAVIS_PULL_REQUEST"]
 
-if "by travis" in commit_msg or "true" in pr:
-    print("Self triggered Build")
-    print("Auto-Abort!")
+os.system("git checkout $TRAVIS_BRANCH")
+
+build = False
+commit_range = os.environ["TRAVIS_COMMIT_RANGE"].split("...")
+git_log = os.popen("git diff-tree --no-commit-id --name-only -r " + commit_range[0] + " " + commit_range[1]).read().split("\n")
+for change in git_log:
+    if change == "":
+        continue
+    if change == "build.py":
+        print("Changed: " + change)
+        build = True
+    if not "/" in change:
+        continue
+    if ".zip" in change.split("/")[1]:
+        continue
+    if "00packages" in change:
+        continue
+    if os.path.isfile(change):
+        print("Changed: " + change)
+        build = True
+
+if not build or "true" in pr:
+    print("Nothing Changed")
+    print("Aborting!")
     sys.exit(0)
 
-os.system("git checkout $TRAVIS_BRANCH")
 os.system("rm packages/*.zip")
 print("Building package index ...")
 
@@ -43,16 +63,16 @@ for l in sorted(os.listdir(".")):
             general_copy = ["name", "category", "author", "icon", "desc", "exec", "html", "managed", "uuid", "version", "firmware"]
             lang_copy = ["name", "desc", "html"]
             name = package.get("app", "name")
-            packages.add_section(name)
+            packages.add_section(l)
             for entry in general_copy:
                 if package.has_option("app", entry):
-                    packages.set(name, entry, package.get("app", entry))
+                    packages.set(l, entry, package.get("app", entry))
             for lang in package.sections():
                 if lang == "app":
                     continue
                 for entry in lang_copy:
                     if package.has_option(lang, entry):
-                        packages.set(name, entry + "_" + lang, package.get(lang, entry))
+                        packages.set(l, entry + "_" + lang, package.get(lang, entry))
             os.system("cd " + l + "; zip -r ../" + l + ".zip *")
 
 pkgfile = open("00packages", "w")
@@ -60,5 +80,5 @@ packages.write(pkgfile)
 pkgfile.close()
 os.system("git config --global push.default simple")
 os.system("git add -A")
-os.system('git -c user.name="$GITHUB_USER" -c user.email="$GITHUB_MAIL" commit -a -m "Automaticly update Repository --- by travis"')
-os.system('git push -f -q https://$GITHUB_USER:$GITHUB_API_KEY@github.com/$GITHUB_USER/ftcommunity-apps/')
+os.system('git -c user.name="$GITHUB_USER" -c user.email="$GITHUB_MAIL" commit -a -m "Travis: Rebuilt package archives from $TRAVIS_COMMIT_RANGE"')
+os.system('git push -f -q https://$GITHUB_USER:$GITHUB_API_KEY@github.com/$TRAVIS_REPO_SLUG/')
