@@ -9,6 +9,7 @@ import sys
 import subprocess
 import stat
 import json
+import time
 from TouchStyle import *
 
 LOCAL_PATH = os.path.dirname(os.path.realpath(__file__))
@@ -80,6 +81,8 @@ class StationListWidget(QListWidget):
     def onItemClicked(self, item):
         # stop whatever is currently playing
         self.stop_player()
+        # wait a second
+        time.sleep(1)
 
         station, url = item.data(Qt.UserRole)
         mpg123_cmd = MPG123.split() + [url]
@@ -92,6 +95,7 @@ class StationListWidget(QListWidget):
         self.proc_mpg123.stdout.close()  # Allow mpg123 to receive a SIGPIPE if txt_play exits.
 
         self.play.emit(station)
+
 
 class FtcGuiApplication(TouchApplication):
 
