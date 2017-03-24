@@ -81,8 +81,8 @@ class StationListWidget(QListWidget):
     def onItemClicked(self, item):
         # stop whatever is currently playing
         self.stop_player()
-        # wait a second
-        time.sleep(1)
+        # wait a bit
+        time.sleep(0.1)
 
         station, url = item.data(Qt.UserRole)
         mpg123_cmd = MPG123.split() + [url]
